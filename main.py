@@ -180,7 +180,7 @@ def net(
         #     backbone_name, backbone_seed = backbone_name.split(".seed-")[0], int(
         #         backbone_name.split("-")[-1]
         #     )
-        backbone = backbones.ResNet50(num_classes=15, channels = 3)
+        backbone = backbones.resnet50()
         # backbone.name, backbone.seed = backbone_name, backbone_seed
 
         simplenet_inst = simplenet.SimpleNet(device)
