@@ -52,7 +52,7 @@ def run(
     )
 
     pid = os.getpid()
-    list_of_dataloaders = methods["get_dataloaders"]
+    list_of_dataloaders = methods["get_dataloaders"](seed)
 
     device = utils.set_torch_device(gpu)
 
