@@ -119,7 +119,7 @@ def run(
 
 
 @main.command("net")
-@click.option("--backbone_names", "-b", type=str, multiple=True, default=[])
+# @click.option("--backbone_names", "-b", type=str, multiple=True, default=[])
 @click.option("--layers_to_extract_from", "-le", type=str, multiple=True, default=[])
 @click.option("--pretrain_embed_dimension", type=int, default=1024)
 @click.option("--target_embed_dimension", type=int, default=1024)

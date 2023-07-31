@@ -10,7 +10,6 @@ python main.py \
 --results_path results \
 --run_name run \
 net \
--b resnet50 \
 -le layer2 \
 -le layer3 \
 --pretrain_embed_dimension 1536 \
