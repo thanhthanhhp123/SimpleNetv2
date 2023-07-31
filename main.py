@@ -52,7 +52,7 @@ def run(
     )
 
     pid = os.getpid()
-    list_of_dataloaders = methods["get_dataloaders"](seed)
+    list_of_dataloaders = methods["get_dataloaders"]
 
     device = utils.set_torch_device(gpu)
 
@@ -77,8 +77,8 @@ def run(
         os.makedirs(models_dir, exist_ok=True)
         for i, SimpleNet in enumerate(simplenet_list):
             # torch.cuda.empty_cache()
-            if SimpleNet.backbone.seed is not None:
-                utils.fix_seeds(SimpleNet.backbone.seed, device)
+            # if SimpleNet.backbone.seed is not None:
+            #     utils.fix_seeds(SimpleNet.backbone.seed, device)
             LOGGER.info(
                 "Training models ({}/{})".format(i + 1, len(simplenet_list))
             )
