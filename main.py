@@ -140,7 +140,6 @@ def run(
 @click.option("--proj_layer_type", type=int, default=0)
 @click.option("--mix_noise", type=int, default=1)
 def net(
-    backbone_names,
     layers_to_extract_from,
     pretrain_embed_dimension,
     target_embed_dimension,
@@ -161,55 +160,55 @@ def net(
     proj_layer_type,
     mix_noise,
 ):
-    backbone_names = list(backbone_names)
-    if len(backbone_names) > 1:
-        layers_to_extract_from_coll = [[] for _ in range(len(backbone_names))]
-        for layer in layers_to_extract_from:
-            idx = int(layer.split(".")[0])
-            layer = ".".join(layer.split(".")[1:])
-            layers_to_extract_from_coll[idx].append(layer)
-    else:
-        layers_to_extract_from_coll = [layers_to_extract_from]
+    # backbone_names = list(backbone_names)
+    # if len(backbone_names) > 1:
+    #     layers_to_extract_from_coll = [[] for _ in range(len(backbone_names))]
+    #     for layer in layers_to_extract_from:
+    #         idx = int(layer.split(".")[0])
+    #         layer = ".".join(layer.split(".")[1:])
+    #         layers_to_extract_from_coll[idx].append(layer)
+    # else:
+    layers_to_extract_from_coll = [layers_to_extract_from]
 
     def get_simplenet(input_shape, device):
         simplenets = []
-        for backbone_name, layers_to_extract_from in zip(
-            backbone_names, layers_to_extract_from_coll
-        ):
-            backbone_seed = None
-            if ".seed-" in backbone_name:
-                backbone_name, backbone_seed = backbone_name.split(".seed-")[0], int(
-                    backbone_name.split("-")[-1]
-                )
-            backbone = backbones.ResNet50(num_classes=15, num_channels = 3)
-            backbone.name, backbone.seed = backbone_name, backbone_seed
+        # for backbone_name, layers_to_extract_from in zip(
+        #     backbone_names, layers_to_extract_from_coll
+        # ):
+        backbone_seed = None
+        # if ".seed-" in backbone_name:
+        #     backbone_name, backbone_seed = backbone_name.split(".seed-")[0], int(
+        #         backbone_name.split("-")[-1]
+        #     )
+        backbone = backbones.ResNet50(num_classes=15, num_channels = 3)
+        # backbone.name, backbone.seed = backbone_name, backbone_seed
 
-            simplenet_inst = simplenet.SimpleNet(device)
-            simplenet_inst.load(
-                backbone=backbone,
-                layers_to_extract_from=layers_to_extract_from,
-                device=device,
-                input_shape=input_shape,
-                pretrain_embed_dimension=pretrain_embed_dimension,
-                target_embed_dimension=target_embed_dimension,
-                patchsize=patchsize,
-                embedding_size=embedding_size,
-                meta_epochs=meta_epochs,
-                aed_meta_epochs=aed_meta_epochs,
-                gan_epochs=gan_epochs,
-                noise_std=noise_std,
-                dsc_layers=dsc_layers,
-                dsc_hidden=dsc_hidden,
-                dsc_margin=dsc_margin,
-                dsc_lr=dsc_lr,
-                auto_noise=auto_noise,
-                train_backbone=train_backbone,
-                cos_lr=cos_lr,
-                pre_proj=pre_proj,
-                proj_layer_type=proj_layer_type,
-                mix_noise=mix_noise,
-            )
-            simplenets.append(simplenet_inst)
+        simplenet_inst = simplenet.SimpleNet(device)
+        simplenet_inst.load(
+            backbone= backbone,
+            layers_to_extract_from=layers_to_extract_from,
+            device=device,
+            input_shape=input_shape,
+            pretrain_embed_dimension=pretrain_embed_dimension,
+            target_embed_dimension=target_embed_dimension,
+            patchsize=patchsize,
+            embedding_size=embedding_size,
+            meta_epochs=meta_epochs,
+            aed_meta_epochs=aed_meta_epochs,
+            gan_epochs=gan_epochs,
+            noise_std=noise_std,
+            dsc_layers=dsc_layers,
+            dsc_hidden=dsc_hidden,
+            dsc_margin=dsc_margin,
+            dsc_lr=dsc_lr,
+            auto_noise=auto_noise,
+            train_backbone=train_backbone,
+            cos_lr=cos_lr,
+            pre_proj=pre_proj,
+            proj_layer_type=proj_layer_type,
+            mix_noise=mix_noise,
+        )
+        simplenets.append(simplenet_inst)
         return simplenets
 
     return ("get_simplenet", get_simplenet)
