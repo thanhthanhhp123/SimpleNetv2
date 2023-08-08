@@ -8,6 +8,8 @@ import numpy as np
 import PIL
 import torch
 import tqdm
+from PIL import Image
+import torchvision
 
 LOGGER = logging.getLogger(__name__)
 
@@ -173,3 +175,61 @@ def compute_and_store_final_results(
 
     mean_metrics = {"mean_{0}".format(key): item for key, item in mean_metrics.items()}
     return mean_metrics
+
+def save_images(images, images_path, data):
+    images = Image.fromarray(images)
+    label = data["label"][0]
+    file_name = data['path'][0].split('/')[-1]
+    if not os.path.exists(images_path):
+        os.makedirs(images_path)
+    image_paths = os.path.join(images_path, label + file_name)
+    images.save(image_paths)
+
+def convert2img(image, imgtype = np.uint8):
+    if not isinstance(image, np.ndarray):
+        if isinstance(image, torch.Tensor):
+            image = image.data
+        else:
+            return image
+        image = image.cpu().numpy()
+    if image.dtype != imgtype:
+        image = (np.transpose(image.squeeze(), (1, 2, 0)) * 0.5 + 0.5) * 255
+    return image.astype(imgtype)
+
+def plt_show(img):
+    img = torchvision.utils.make_grid(img.cpu().numpy())
+    img = img.numpy()
+    if img.dtype != "uint8":
+        img_numpy = img * 0.5 + 0.5
+    plt.figure(figsize=(10, 10))
+    plt.imshow(np.transpose(img_numpy, (1, 2, 0)))
+    plt.show()
+
+def compare_images(real_img, generated_img, threshold):
+    generated_img = generated_img.type_as(real_img)
+    diff_img = np.abs(real_img - generated_img)
+    real_img = convert2img(real_img)
+    generated_img = convert2img(generated_img)
+    diff_img = convert2img(diff_img)
+
+    threshold = (threshold * 0.5 + 0.5)*255
+    diff_img[diff_img < threshold] = 0
+    anomaly_img = np.zeros_like(real_img)
+    anomaly_img[:, :, :] = real_img
+    anomaly_img[np.where(diff_img > 0)[0], np.where(diff_img > 0)[1]] = [200, 0, 0]
+
+    fig, ax = plt.subplots(1, 4, figsize=(20, 20))
+    fig.set_figwidth(9)
+    fig.set_tight_layout(True)
+    ax = ax.reshape(-1)
+    ax[0].imshow(real_img, label='real')
+    ax[1].imshow(generated_img, label='generated')
+    ax[2].imshow(diff_img, label='diff')
+    ax[3].imshow(anomaly_img, label='anomaly')
+
+    ax[0].set_title('real')
+    ax[1].set_title('generated')
+    ax[2].set_title('diff')
+    ax[3].set_title('anomaly')
+    plt.show()
+    return convert2img(anomaly_img)

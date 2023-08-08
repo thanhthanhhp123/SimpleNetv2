@@ -1,5 +1,4 @@
-import torch
-import torchvision.models as models
+from simplenet import SimpleNet
 
-model = models.resnet50(pretrained=True)
-print(model)
+s = SimpleNet()
+s.predict()
