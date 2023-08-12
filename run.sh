@@ -17,7 +17,7 @@ net \
 --patchsize 3 \
 --meta_epochs 5 \
 --embedding_size 256 \
---gan_epochs 4 \
+--gan_epochs 2 \
 --noise_std 0.015 \
 --dsc_hidden 1024 \
 --dsc_layers 2 \
