@@ -10,12 +10,12 @@ python /content/SimpleNetv2/main.py \
 --results_path results \
 --run_name run \
 net \
--le layer2 \
 -le layer3 \
+-le layer4 \
 --pretrain_embed_dimension 1536 \
 --target_embed_dimension 1536 \
 --patchsize 3 \
---meta_epochs 10 \
+--meta_epochs 5 \
 --embedding_size 256 \
 --gan_epochs 4 \
 --noise_std 0.015 \
