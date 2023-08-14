@@ -706,7 +706,7 @@ class PatchMaker:
         def mask_transform(mask):
             return data.dataset.transform_mask(mask).numpy()
         plot_segmentation_images(
-            './outputs',
+            '/content/outputs',
             image_paths,
             segmentations,
             scores,
