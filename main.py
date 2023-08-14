@@ -30,7 +30,7 @@ _DATASETS = {
 @click.option("--log_project", type=str, default="project")
 @click.option("--run_name", type=str, default="test")
 @click.option("--test", is_flag=True)
-@click.option("--save_segmentation_images", is_flag=True, default=False, show_default=True)
+@click.option("--save_segmentation_images", is_flag=True, default=True, show_default=True)
 def main(**kwargs):
     pass
 
