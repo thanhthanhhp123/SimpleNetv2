@@ -75,7 +75,7 @@ class MVTecDataset(torch.utils.data.Dataset):
             transforms.ToTensor(),
             transforms.Normalize(mean = IMAGE_MEAN, std = IMAGENET_STD)
         ]
-        self.transform_img = transforms.Compose(self.transform_img)
+        self.transforms_img = transforms.Compose(self.transform_img)
 
         self.transform_mask = [
             transforms.Resize(resize),
@@ -88,7 +88,7 @@ class MVTecDataset(torch.utils.data.Dataset):
     def __getitem__(self, idx):
         classname, anomaly, image_path, mask_path = self.data_to_iterate[idx]
         image = PIL.Image.open(image_path).convert("RGB")
-        image = self.transform_img(image)
+        image = self.transforms_img(image)
 
         if self.split == DatasetSplit.TEST and mask_path is not None:
             mask = PIL.Image.open(mask_path)
