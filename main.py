@@ -90,21 +90,22 @@ def run(
             if not test:
                 i_auroc, p_auroc, pro_auroc = SimpleNet.train(dataloaders["training"], dataloaders["testing"])
             else:
-                i_auroc, p_auroc, pro_auroc =  SimpleNet.test(dataloaders["training"], dataloaders["testing"], save_segmentation_images)
+                i_auroc, full_pixel_auroc =  SimpleNet.test(dataloaders["training"], dataloaders["testing"], save_segmentation_images)
 
-
-            result_collect.append(
-                {
-                    "dataset_name": dataset_name,
-                    "instance_auroc": i_auroc, # auroc,
-                    "full_pixel_auroc": p_auroc, # full_pixel_auroc,
-                    "anomaly_pixel_auroc": pro_auroc,
-                }
-            )
-
-            for key, item in result_collect[-1].items():
-                if key != "dataset_name":
-                    LOGGER.info("{0}: {1:3.3f}".format(key, item))
+            try:
+                result_collect.append(
+                    {
+                        "dataset_name": dataset_name,
+                        "instance_auroc": i_auroc, # auroc,
+                        "full_pixel_auroc": p_auroc, # full_pixel_auroc,
+                        "anomaly_pixel_auroc": pro_auroc,
+                    }
+                )
+                for key, item in result_collect[-1].items():
+                    if key != "dataset_name":
+                        LOGGER.info("{0}: {1:3.3f}".format(key, item))
+            except:
+                pass
 
         LOGGER.info("\n\n-----\n")
 

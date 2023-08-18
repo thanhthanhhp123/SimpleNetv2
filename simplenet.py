@@ -641,12 +641,12 @@ class SimpleNet(torch.nn.Module):
                 data.dataset.transform_std
             ).reshape(-1, 1, 1)
             in_mean = np.array(
-                data.dataset.transform_mean
+                data.dataset.transform_mask
             ).reshape(-1, 1, 1)
+            print(in_std, in_mean)
             image = data.dataset.transforms_img(image)
-            return np.clip(
-                (image * in_std + in_mean) * 255, 0, 255
-            ).astype(np.uint8)
+            print(image)
+            return image
         def mask_transform(mask):
             return data.dataset.transform_mask(mask).numpy()
         plot_segmentation_images(
