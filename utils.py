@@ -69,7 +69,7 @@ def plot_segmentation_images(
         f, axes = plt.subplots(1, 2 + int(masks_provided))
         axes[0].imshow(image.transpose(1, 2, 0))
         axes[1].imshow(mask.transpose(1, 2, 0))
-        axes[2].imshow(segmentation)
+        axes[2].imshow(segmentation, cmap = 'heatmap')
         f.set_size_inches(3 * (2 + int(masks_provided)), 3)
         f.tight_layout()
         f.savefig(savename)

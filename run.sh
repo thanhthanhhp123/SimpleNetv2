@@ -10,8 +10,8 @@ python /content/SimpleNetv2/main.py \
 --results_path results \
 --run_name run \
 net \
+-le layer2 \
 -le layer3 \
--le layer4 \
 --pretrain_embed_dimension 1536 \
 --target_embed_dimension 1536 \
 --patchsize 3 \

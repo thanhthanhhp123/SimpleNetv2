@@ -182,6 +182,9 @@ def _resnet(arch: str, block: Type[Union[BasicBlock, Bottleneck]],
 def resnet50(**kwargs: Any) -> ResNet:
     return _resnet('resnet50', Bottleneck, [3,4,6,3], **kwargs)
 
+def wide_resnet50(**kwargs: Any) -> ResNet:
+    return _resnet('wide_resnet50', Bottleneck, [3,4,6,3], **kwargs)
+
 if __name__ == '__main__':
-    model = resnet50()
-    print(model)
+    model = wide_resnet50()
+    print(model.layer2)
