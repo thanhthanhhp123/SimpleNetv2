@@ -281,7 +281,7 @@ class SimpleNet(torch.nn.Module):
     
     def test(self, training_data, test_data, save_segmentation_images):
 
-        ckpt_path = os.path.join(self.ckpt_dir, "models.ckpt")
+        ckpt_path = os.path.join(self.ckpt_dir, "ckpt.pth")
         # if os.path.exists(ckpt_path):
         #     state_dicts = torch.load(ckpt_path, map_location=self.device)
         #     if "pretrained_enc" in state_dicts:
@@ -652,7 +652,7 @@ class SimpleNet(torch.nn.Module):
             ).reshape(-1, 1, 1)
             image = data.dataset.transforms_img(image)
             img =  np.clip(
-                (image * in_std + in_mean) * 255, 0, 255
+                (image.numpy() * in_std + in_mean) * 255, 0, 255
             ).astype(np.uint8)
             return img
         def mask_transform(mask):
