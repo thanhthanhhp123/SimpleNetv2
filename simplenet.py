@@ -282,12 +282,19 @@ class SimpleNet(torch.nn.Module):
     def test(self, training_data, test_data, save_segmentation_images):
 
         ckpt_path = os.path.join(self.ckpt_dir, "models.ckpt")
-        if os.path.exists(ckpt_path):
-            state_dicts = torch.load(ckpt_path, map_location=self.device)
-            if "pretrained_enc" in state_dicts:
-                self.feature_enc.load_state_dict(state_dicts["pretrained_enc"])
-            if "pretrained_dec" in state_dicts:
-                self.feature_dec.load_state_dict(state_dicts["pretrained_dec"])
+        # if os.path.exists(ckpt_path):
+        #     state_dicts = torch.load(ckpt_path, map_location=self.device)
+        #     if "pretrained_enc" in state_dicts:
+        #         self.feature_enc.load_state_dict(state_dicts["pretrained_enc"])
+        #     if "pretrained_dec" in state_dicts:
+        #         self.feature_dec.load_state_dict(state_dicts["pretrained_dec"])
+        state_dict = torch.load(ckpt_path, map_location=self.device)
+        if 'discriminator' in state_dict:
+            self.discriminator.load_state_dict(state_dict['discriminator'])
+            if 'pre_projection' in state_dict:
+                self.pre_projection.load_state_dict(state_dict['pre_projection'])
+        else:
+            self.load_state_dict(state_dict, strict=False)
 
         aggregator = {"scores": [], "segmentations": [], "features": []}
         scores, segmentations, features, labels_gt, masks_gt = self.predict(test_data)
